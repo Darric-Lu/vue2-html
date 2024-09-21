@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16"></script>
+
+</head>
+<body>
+  <div id="root">
+    <h1>Hi, {{name}}</h1>
+    <h2 style="margin-bottom: 12px; display: block;">this is {{ framework.version }} </h2>
+
+    <p>input text => {{ input.text1 }}</p>
+
+    <input type="text" v-model="input.text1">
+    <button @click="btnRestClick">重設</button>
+    <button type="button" @keyup.space="showMsg">
+      點擊後 空白建
+    </button >
+
+    <h2>{{ fullText }} </h2>
+
+    <input type="text" v-model="input.text1">
+    <input type="text" v-model="input.text2">
+
+    <h2 class="text-g">{{ name }} </h2>
+    <input type="text" v-model="name">
+    <p class="text-r"> {{ changeName }}</p>
+
+    <h2>顯示文字</h2>
+    <button @click="toggleText">{{ btnText }}</button>
+    <div v-show="showText"> 你看到文字了！！</div>
+
+    <ul>
+      <il
+        v-for="man in classmate"
+        :key="man.seat"
+      >
+        <p>姓名：{{ man.name }}</p> 
+        <p>座位：{{ man.seat }}</p> 
+      </il>
+    </ul>
+    <button @click="addClassmate">增加</button>
+
+    <h2> 另外組件</h2>
+    <person-info />
+  </div>
+
+  <script type="text/javascript" >
+    const aTest = {
+      name: 'True',
+      age: 45
+    }
+
+    const classmate = [
+      { name: 'Darric', seat: '1-1' },
+      { name: 'jimmy', seat: '2-1'},
+      { name: 'kevin', seat: '3-1'}
+    ]
+
+    const personInfo = Vue.extend({
+      template : `
+        <div>
+            <h1>個人資訊</h1>
+            <h2>名稱：{{name}}</h2>
+            <h2>年齡：{{age}}</h2>
+        </div>`,
+      data(){
+        return {
+          name : 'adam',
+          age : 24
+        }
+      }
+    })
+
+    const vm = new Vue({
+      el: '#root',
+      data:{
+        name: 'Darric',
+        framework: {
+          version: 'Vue2'
+        },
+        input: {
+          text1: 'front end',
+          text2: 'web designer'
+        },
+        changeName: undefined,
+        showText: false,
+        btnText: '顯示',
+        aTest,
+        classmate
+      },
+      components:{
+        personInfo
+      },
+      methods: {
+        btnRestClick() {
+          this.input.text1 = 'front end'
+        },
+        showMsg() {
+          window.alert(this.input.test1)
+        },
+        toggleText() {
+          this.showText = !this.showText
+          if(this.showText) this.btnText = '不顯示'
+          else this.btnText = '顯示'
+        },
+        addClassmate() {
+          const name = ['glass', 'roy', 'ken']
+          classmate.push(
+            {
+              name: name[Math.floor(Math.random() * name.length)],
+              seat: `${classmate.length + 1}-1`
+            })
+        }
+      },
+      computed: {
+        fullText () {
+          return this.input.text1 + this.input.text2
+        }
+      },
+      watch: {
+        name (newVal, oldVal) {
+          if (this.name !== 'Darric') this.changeName = 'name changed'
+          else this.changeName = undefined
+        }
+      }
+    })
+
+    // 外層變更資料 
+    // Vue.set(vm._data.classmate, 1, { name: 'Alex', seat: '0-1'})
+  
+    
+  </script>
+
+  <style>
+    .text-r {
+      color:red;
+    }
+    .text-g {
+      color: green
+    }
+  </style>
+
+</body>
+</html>
